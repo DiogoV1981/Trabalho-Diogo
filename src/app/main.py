@@ -70,40 +70,25 @@ app.add_middleware(
 @app.on_event("startup")
 async def startup_event():
     """
-    Set up actions to perform when the app starts.
-
-    Configures the tracking URI for MLflow to locate the model metadata
-    in the local mlruns directory.
+    Ações ao iniciar a aplicação.
     """
     mlflow.set_tracking_uri(f"{config['tracking_base_url']}:{config['tracking_port']}")
 
-    # Load the registered model specified in the configuration
+    # Carregar o modelo registrado
     model_uri = f"models:/{config['model_name']}@{config['model_version']}"
     app.model = mlflow.pyfunc.load_model(model_uri=model_uri)
-    
     print(f"Loaded model {model_uri}")
 
 
 @app.post("/predict")
-async def predict(input: Request):  
+async def predict(input: RequestModel):  
     """
-    Prediction endpoint that processes input data and returns a model prediction.
-
-    Parameters:
-        input (Request): Request body containing input values for the model.
-
-    Returns:
-        dict: A dictionary with the model prediction under the key "prediction".
+    Endpoint de predição.
     """
-
-    # Build a DataFrame from the request data
-    input_df = pd.DataFrame.from_dict({k: [v] for k, v in input.model_dump().items()})
-
-    # Predict using the model and retrieve the first item in the prediction list
+    input_df = pd.DataFrame.from_dict({k: [v] for k, v in input.dict().items()})
     prediction = app.model.predict(input_df)
-
-    # Return the prediction result as a JSON response
     return {"prediction": prediction.tolist()[0]}
 
 # Run the app on port 5003
-uvicorn.run(app=app, port=config["service_port"], host="0.0.0.0")
+if __name__ == "__main__":
+    uvicorn.run(app=app, port=config["service_port"], host="0.0.0.0")

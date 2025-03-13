@@ -1,6 +1,7 @@
 {
     "model_name": "random_forest",
     "model_version": "champion",
-    "tracking_base_url": "http://mlflow-tracking-server",
-    "tracking_port": 5000
+    "tracking_base_url": "http://127.0.0.1",  
+    "tracking_port": 5000,
+    "service_port": 5003  
 }
