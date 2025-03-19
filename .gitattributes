@@ -1,0 +1,2 @@
+*.pkl filter=lfs diff=lfs merge=lfs -text
+mlruns/870553150525548120/7ef7a6ba1a334a46b06d66a0548ae849/artifacts/random_forest/model.pkl filter=lfs diff=lfs merge=lfs -text

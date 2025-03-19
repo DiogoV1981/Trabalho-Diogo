@@ -1,0 +1,7 @@
+{
+    "model_name": "random_forest",
+    "model_version": "1",
+    "tracking_base_url": "http://172.18.0.2",  
+    "tracking_port": 5000,
+    "service_port": 5003  
+}

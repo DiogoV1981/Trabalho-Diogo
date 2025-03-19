@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/870553150525548120/7ef7a6ba1a334a46b06d66a0548ae849/artifacts
+end_time: 1741975160225
+entry_point_name: ''
+experiment_id: '870553150525548120'
+lifecycle_stage: active
+run_id: 7ef7a6ba1a334a46b06d66a0548ae849
+run_name: RandomForest
+run_uuid: 7ef7a6ba1a334a46b06d66a0548ae849
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1741974645204
+status: 3
+tags: []
+user_id: diogo
