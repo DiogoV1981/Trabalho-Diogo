@@ -1,7 +1,7 @@
 import pytest
 import requests
 
-BASE_URL = "http://localhost:5003"  # Substitua pelo URL do seu servidor implantado se for diferente
+BASE_URL = "http://localhost:5003"  
 
 def test_predict():
     """
@@ -10,7 +10,7 @@ def test_predict():
     """
     response = requests.post(f"{BASE_URL}/predict", json={
         'LIMIT_BAL': 20000.0,
-        'SEX': 2,
+        'SEX': 1,
         'EDUCATION': 2,
         'MARRIAGE': 1,
         'AGE': 24,
