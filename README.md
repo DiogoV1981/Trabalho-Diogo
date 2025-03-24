@@ -31,7 +31,7 @@ Garantam que tanto o repositório do github como o package no github estão ambo
 TBD
 
 Deve ser enviada, até à data limite de entrega, um link para o vosso github (tem de estar público). Podem enviar este link para o meu email `lopesg.miguel@gmail.com` ou slack.
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Índice
 1. Tecnologias Utilizadas
 2. Pré-requisitos
@@ -40,7 +40,7 @@ Deve ser enviada, até à data limite de entrega, um link para o vosso github (t
 5. Como Testar o Serviço
 6. Detalhes do Pipeline CI/CD
 
-
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 1. Tecnologias Utilizadas
    Este projeto foi desenvolvido utilizando as seguintes tecnologias:
    *  Python (>=3.12):Linguagem principal para desenvolvimento do modelo e serviço 
@@ -136,7 +136,7 @@ Git (para clonar o repositório)
     * Verifica a consistência das predições para diferentes cenários (valores normalizados e extremos).
     * Garante que o formato de saída do modelo seja compatível (ex.: apenas uma predição por entrada).
   
-7. Detalhes do Pipeline CI/CD
+6. Detalhes do Pipeline CI/CD
    Este projeto implementa um pipeline CI/CD com GitHub Actions. Aqui está o fluxo do pipeline (configuração do arquivo: .github/workflows/cicd.yml):
    a)  Build do Ambiente: Cria o ambiente com base no conda.yaml para rodar os testes.
    b)  Testes Automatizados: Executa todos os testes implementados no serviço e no modelo.
