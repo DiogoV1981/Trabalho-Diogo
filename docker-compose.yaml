@@ -12,18 +12,13 @@ services:
 
   # Aplicação FastAPI (consome modelos do MLflow)
   fastapi-application:
-    build:
-      context: .
-      dockerfile: Dockerfile.Service
-    image: fastapi-application:latest
+    image: ghcr.io/diogov1981/fastapi-application:latest  # Imagem publicada no GitHub Container Registry
     container_name: fastapi-application
     depends_on:
-      - mlflow-tracking-server # Garantir que o MLflow esteja pronto antes de iniciar a FastAPI
+      - mlflow-tracking-server  # Garantir que o MLflow esteja pronto antes de iniciar a FastAPI
     environment:
-      TRACKING_URI: "http://mlflow-tracking-server:5000" # Configurar o URI do MLflow no container
-      MODEL_NAME: "random_forest_v2"                       # Nome do modelo
-      MODEL_VERSION: "1" 
-    #volumes:
-     # - ./mlruns:/mlruns 
+      TRACKING_URI: "http://mlflow-tracking-server:5000"  # Configurar o URI do MLflow no container
+      MODEL_NAME: "random_forest_v2"  # Nome do modelo registrado
+      MODEL_VERSION: "1"             # Versão do modelo registrado
     ports:
-      - "5003:5003" # Porta onde a FastAPI estará acessível
+      - "5003:5003"  # Porta onde a FastAPI estará acessível

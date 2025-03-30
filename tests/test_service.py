@@ -36,7 +36,7 @@ def test_predict():
     assert response.status_code == 200
     assert "prediction" in response.json()
     assert isinstance(response.json()["prediction"], (int, float))
-    assert response.json()["prediction"] == 0  # Ajuste conforme necessário
+    assert response.json()["prediction"] == 0  
 
 if __name__ == "__main__":
     pytest.main()
