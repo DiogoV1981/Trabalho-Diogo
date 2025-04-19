@@ -30,6 +30,10 @@ jobs:
         with:
           environment-file: conda.yaml
           activate-environment: OML
+          
+      - name: Atualizar dependências para evitar conflitos no CI/CD
+        run: |
+          conda run --no-capture-output -n OML pip install --force mlflow==2.20.3 cloudpickle==3.1.1
 
       - name: Executar testes
         run: conda run --no-capture-output -n OML pytest
