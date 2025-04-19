@@ -28,6 +28,9 @@ jobs:
       - name: Esperar inicialização dos serviços
         run: sleep 10
 
+      - name: Verificar containers ativos antes dos testes
+        run: docker ps -a
+
       - name: Validar se a FastAPI está rodando antes dos testes
         run: curl --fail http://localhost:5003/docs || exit 1
 
