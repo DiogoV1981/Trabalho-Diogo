@@ -25,6 +25,15 @@ jobs:
       - name: Iniciar serviços
         run: docker compose up -d
 
+      - name: Esperar inicialização dos serviços
+        run: sleep 10
+
+      - name: Validar se a FastAPI está rodando antes dos testes
+        run: curl --fail http://localhost:5003/docs || exit 1
+
+      - name: Validar acesso ao MLflow antes dos testes
+        run: curl --fail http://mlflow-tracking-server:5000 || exit 1
+
       - name: Criar ambiente para executar testes com o conda
         uses: conda-incubator/setup-miniconda@v2
         with:
