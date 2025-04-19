@@ -31,11 +31,11 @@ jobs:
       - name: Verificar containers ativos antes dos testes
         run: docker ps -a
 
-      - name: Validar se a FastAPI está rodando antes dos testes
+      - name: Testar acesso à FastAPI antes dos testes
         run: curl --fail http://localhost:5003/docs || exit 1
 
-      - name: Validar acesso ao MLflow antes dos testes
-        run: curl --fail http://mlflow-tracking-server:5000 || exit 1
+      - name: Testar acesso ao MLflow usando localhost
+        run: curl --fail http://localhost:5000 || exit 1
 
       - name: Criar ambiente para executar testes com o conda
         uses: conda-incubator/setup-miniconda@v2
