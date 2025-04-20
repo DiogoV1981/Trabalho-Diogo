@@ -46,7 +46,7 @@ jobs:
       - name: Verificar versões das dependências no CI/CD
         run: conda run --no-capture-output -n OML conda list
 
-       - name: Atualizar dependências para evitar conflitos no CI/CD
+      - name: Atualizar dependências para evitar conflitos no CI/CD
         run: |
           conda run --no-capture-output -n OML pip install --force mlflow==2.18.0 cloudpickle==3.0.0
 
