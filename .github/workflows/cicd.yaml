@@ -19,6 +19,13 @@ jobs:
       - name: Obter repositório
         uses: actions/checkout@v3
 
+      - name: Configurar Git LFS e recuperar arquivos corretamente
+        run: |
+          git lfs install
+          git lfs pull
+          git lfs fetch
+          git lfs checkout
+
       - name: Configurar Docker
         uses: docker/setup-buildx-action@v2
 
@@ -43,9 +50,6 @@ jobs:
           environment-file: conda.yaml
           activate-environment: OML
 
-      - name: Verificar versões das dependências no CI/CD
-        run: conda run --no-capture-output -n OML conda list
-
       - name: Validar dependências instaladas no CI/CD
         run: conda run --no-capture-output -n OML pip freeze | grep -E 'mlflow|cloudpickle|numpy|pandas|psutil|scikit-learn|scipy'
 
@@ -63,6 +67,7 @@ jobs:
 
       - name: Testar carregamento do modelo pelo diretório correto
         run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.sklearn.load_model('mlruns/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2/'); print(model)"     
+      
       - name: Executar testes
         run: conda run --no-capture-output -n OML pytest
 
