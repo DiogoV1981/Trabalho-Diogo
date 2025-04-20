@@ -44,7 +44,7 @@ jobs:
           activate-environment: OML
 
       - name: Verificar versões das dependências no CI/CD
-        run: conda list | grep "mlflow\|cloudpickle\|numpy\|scipy"
+        run: conda run --no-capture-output -n OML conda list
 
       - name: Verificar se o modelo está acessível no CI/CD
         run: conda run --no-capture-output -n OML mlflow models list
