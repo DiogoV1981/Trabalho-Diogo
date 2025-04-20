@@ -56,13 +56,15 @@ jobs:
         run: conda run --no-capture-output -n OML2 pip freeze | grep -E 'mlflow|cloudpickle'
 
       - name: Baixar artefatos do modelo para o CI/CD
-        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); client = mlflow.tracking.MlflowClient(); artifacts = client.download_artifacts('dc4c59d0a68a4c36b77c252d92f002d2', 'random_forest_v2'); print(artifacts)"
+        run: |
+          ARTIFACT_PATH=$(conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); client = mlflow.tracking.MlflowClient(); artifacts = client.download_artifacts('dc4c59d0a68a4c36b77c252d92f002d2', 'random_forest_v2'); print(artifacts)")
+          echo "ARTIFACT_PATH=$ARTIFACT_PATH" >> $GITHUB_ENV
 
       - name: Verificar se os artefatos do modelo estão presentes no CI/CD
-        run: conda run --no-capture-output -n OML2 python -c "import os; model_dir = '/tmp/tmpv5ldx6jp/random_forest_v2'; print(os.listdir(model_dir))"
+        run: conda run --no-capture-output -n OML2 python -c "import os; model_dir = '$ARTIFACT_PATH'; print(os.listdir(model_dir))"
 
       - name: Testar carregamento do modelo no CI/CD com `pyfunc`
-        run: conda run --no-capture-output -n OML2 python -c "import mlflow; model_path = '/tmp/tmpv5ldx6jp/random_forest_v2'; model = mlflow.pyfunc.load_model(model_path); print(model)"
+        run: conda run --no-capture-output -n OML2 python -c "import mlflow; model = mlflow.pyfunc.load_model('$ARTIFACT_PATH'); print(model)"  
       
       - name: Executar testes
         run: conda run --no-capture-output -n OML2 pytest
