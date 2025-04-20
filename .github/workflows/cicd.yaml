@@ -61,9 +61,9 @@ jobs:
       - name: Inspecionar detalhes do modelo no MLflow Registry
         run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); client = mlflow.tracking.MlflowClient(); print(client.get_registered_model('random_forest_v2'))"
 
-      - name: Testar carregamento do modelo pelo caminho correto no MLflow Registry
-        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.sklearn.load_model('mlflow-artifacts:/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2'); print(model)"
-
+      - name: Testar carregamento do modelo no CI/CD com `pyfunc`
+        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.pyfunc.load_model('mlflow-artifacts:/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2'); print(model)"
+      
       - name: Executar testes
         run: conda run --no-capture-output -n OML2 pytest
 
