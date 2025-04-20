@@ -41,31 +41,31 @@ jobs:
         uses: conda-incubator/setup-miniconda@v2
         with:
           environment-file: conda.yaml
-          activate-environment: OML
+          activate-environment: OML2
 
       - name: Validar dependências instaladas no CI/CD
-        run: conda run --no-capture-output -n OML pip freeze | grep -E 'mlflow|cloudpickle|numpy|pandas|psutil|scikit-learn|scipy'
+        run: conda run --no-capture-output -n OML2 pip freeze | grep -E 'mlflow|cloudpickle|numpy|pandas|psutil|scikit-learn|scipy'
 
       - name: Atualizar dependências no CI/CD para corresponder ao modelo
         run: |
-          conda run --no-capture-output -n OML pip install --force \
+          conda run --no-capture-output -n OML2 pip install --force \
             mlflow==2.20.3 cloudpickle==3.1.1 numpy==2.0.1 pandas==2.2.3 \
             psutil==5.9.0 scikit-learn==1.6.1 scipy==1.15.1
 
       - name: Verificar versão do MLflow e `cloudpickle` no CI/CD
-        run: conda run --no-capture-output -n OML pip freeze | grep -E 'mlflow|cloudpickle'
+        run: conda run --no-capture-output -n OML2 pip freeze | grep -E 'mlflow|cloudpickle'
 
       - name: Listar modelos registrados no MLflow Registry
-        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); print(mlflow.search_registered_models())"
+        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); print(mlflow.search_registered_models())"
 
       - name: Inspecionar detalhes do modelo no MLflow Registry
-        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); client = mlflow.tracking.MlflowClient(); print(client.get_registered_model('random_forest_v2'))"
+        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); client = mlflow.tracking.MlflowClient(); print(client.get_registered_model('random_forest_v2'))"
 
-      - name: Testar carregamento do modelo como Sklearn
-        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.sklearn.load_model('models:/random_forest_v2@champion'); print(model)"    
-      
+      - name: Testar carregamento do modelo pelo caminho correto no MLflow Registry
+        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.sklearn.load_model('mlflow-artifacts:/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2'); print(model)"
+
       - name: Executar testes
-        run: conda run --no-capture-output -n OML pytest
+        run: conda run --no-capture-output -n OML2 pytest
 
       - name: Iniciar sessão no repositório do GitHub
         uses: docker/login-action@v2
