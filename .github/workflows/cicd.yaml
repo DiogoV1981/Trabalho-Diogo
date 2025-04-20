@@ -52,11 +52,11 @@ jobs:
             mlflow==2.20.3 cloudpickle==3.1.1 numpy==2.0.1 scipy==1.15.1
 
       - name: Verificar dependências do modelo no CI/CD
-        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); print(mlflow.pyfunc.get_model_dependencies('models:/random_forest_v2@champion'))"
-      
-      - name: Testar carregamento do modelo sem `cloudpickle`
-        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.sklearn.load_model('models:/random_forest_v2@champion'); print(model)"
-      
+        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); print(mlflow.pyfunc.get_model_dependencies('mlruns/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2/model.pkl'))"
+
+      - name: Testar carregamento do modelo com caminho corrigido
+        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.pyfunc.load_model('mlruns/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest v2/model.pkl'); print(model)"
+  
       - name: Executar testes
         run: conda run --no-capture-output -n OML pytest
 
