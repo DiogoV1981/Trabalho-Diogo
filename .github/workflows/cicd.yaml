@@ -59,15 +59,10 @@ jobs:
             mlflow==2.20.3 cloudpickle==3.1.1 numpy==2.0.1 pandas==2.2.3 \
             psutil==5.9.0 scikit-learn==1.6.1 scipy==1.15.1
 
-      - name: Verificar tamanho do arquivo no CI/CD
-        run: conda run --no-capture-output -n OML ls -lh mlruns/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2/model.pkl
-
-      - name: Inspecionar conteúdo do modelo antes do carregamento
-        run: conda run --no-capture-output -n OML python -c "import pickle; f = open('mlruns/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2/model.pkl', 'rb'); print(f.read(100))"
-
-      - name: Testar carregamento do modelo pelo diretório correto
-        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.sklearn.load_model('mlruns/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2/'); print(model)"     
-      
+      - name: Testar carregamento do modelo via MLflow Registry
+        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.pyfunc.load_model('models:/random_forest_v2@v1'); print(model)"
+ 
+  
       - name: Executar testes
         run: conda run --no-capture-output -n OML pytest
 
