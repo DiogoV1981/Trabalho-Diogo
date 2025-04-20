@@ -55,15 +55,14 @@ jobs:
       - name: Verificar versão do MLflow e `cloudpickle` no CI/CD
         run: conda run --no-capture-output -n OML2 pip freeze | grep -E 'mlflow|cloudpickle'
 
-      - name: Listar modelos registrados no MLflow Registry
-        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); print(mlflow.search_registered_models())"
+      - name: Baixar artefatos do modelo para o CI/CD
+        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); client = mlflow.tracking.MlflowClient(); artifacts = client.download_artifacts('dc4c59d0a68a4c36b77c252d92f002d2', 'random_forest_v2'); print(artifacts)"
 
-      - name: Inspecionar detalhes do modelo no MLflow Registry
-        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); client = mlflow.tracking.MlflowClient(); print(client.get_registered_model('random_forest_v2'))"
+      - name: Verificar se os artefatos do modelo estão presentes no CI/CD
+        run: conda run --no-capture-output -n OML2 python -c "import os; model_dir = '/home/runner/work/OML-trabalho/OML-trabalho/mlruns/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2'; print(os.listdir(model_dir))"
 
       - name: Testar carregamento do modelo no CI/CD com `pyfunc`
-        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.pyfunc.load_model('mlflow-artifacts:/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2'); print(model)"
-      
+        run: conda run --no-capture-output -n OML2 python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.pyfunc.load_model('mlflow-artifacts:/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2'); print(model)"    
       - name: Executar testes
         run: conda run --no-capture-output -n OML2 pytest
 
