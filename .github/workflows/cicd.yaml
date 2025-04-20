@@ -46,11 +46,15 @@ jobs:
       - name: Verificar versões das dependências no CI/CD
         run: conda run --no-capture-output -n OML conda list
 
-      - name: Atualizar dependências para corresponder ao ambiente onde o modelo foi salvo
+      - name: Validar dependências instaladas no CI/CD
+        run: conda run --no-capture-output -n OML pip freeze | grep -E 'mlflow|cloudpickle|numpy|pandas|psutil|scikit-learn|scipy'
+
+      - name: Atualizar dependências no CI/CD para corresponder ao modelo
         run: |
           conda run --no-capture-output -n OML pip install --force \
-            mlflow==2.20.3 cloudpickle==3.1.1 numpy==2.0.1 scipy==1.15.1
-
+            mlflow==2.20.3 cloudpickle==3.1.1 numpy==2.0.1 pandas==2.2.3 \
+            psutil==5.9.0 scikit-learn==1.6.1 scipy==1.15.1
+            
       - name: Verificar arquivos dentro do modelo no CI/CD
         run: conda run --no-capture-output -n OML ls -lh mlruns/870553150525548120/dc4c59d0a68a4c36b77c252d92f002d2/artifacts/random_forest_v2/
       
