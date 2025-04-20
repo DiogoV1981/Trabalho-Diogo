@@ -52,14 +52,17 @@ jobs:
             mlflow==2.20.3 cloudpickle==3.1.1 numpy==2.0.1 pandas==2.2.3 \
             psutil==5.9.0 scikit-learn==1.6.1 scipy==1.15.1
 
+      - name: Verificar versão do MLflow e `cloudpickle` no CI/CD
+        run: conda run --no-capture-output -n OML pip freeze | grep -E 'mlflow|cloudpickle'
+
       - name: Listar modelos registrados no MLflow Registry
         run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); print(mlflow.search_registered_models())"
 
       - name: Inspecionar detalhes do modelo no MLflow Registry
-        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); print(mlflow.get_registered_model('random_forest_v2'))"
+        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); client = mlflow.tracking.MlflowClient(); print(client.get_registered_model('random_forest_v2'))"
 
       - name: Testar carregamento do modelo como Sklearn
-        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.sklearn.load_model('models:/random_forest_v2@champion'); print(model)"
+        run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.sklearn.load_model('models:/random_forest_v2@champion'); print(model)"    
       
       - name: Executar testes
         run: conda run --no-capture-output -n OML pytest
