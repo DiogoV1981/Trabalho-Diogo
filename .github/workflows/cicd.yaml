@@ -46,12 +46,15 @@ jobs:
       - name: Verificar versões das dependências no CI/CD
         run: conda run --no-capture-output -n OML conda list
 
+       - name: Atualizar dependências para evitar conflitos no CI/CD
+        run: |
+          conda run --no-capture-output -n OML pip install --force mlflow==2.18.0 cloudpickle==3.0.0
+
+      - name: Verificar dependências do modelo no CI/CD
+        run: conda run --no-capture-output -n OML python -c "import mlflow; print(mlflow.pyfunc.get_model_dependencies('models:/random_forest_v2@champion'))"
+
       - name: Testar carregamento do modelo no CI/CD
         run: conda run --no-capture-output -n OML python -c "import mlflow; mlflow.set_tracking_uri('http://localhost:5000'); model = mlflow.pyfunc.load_model('models:/random_forest_v2@champion'); print(model)"
-
-      - name: Atualizar dependências para evitar conflitos no CI/CD
-        run: |
-          conda run --no-capture-output -n OML pip install --force mlflow==2.20.3 cloudpickle==3.1.1
 
       - name: Executar testes
         run: conda run --no-capture-output -n OML pytest
